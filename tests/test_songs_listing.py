@@ -9,7 +9,7 @@ class TestSongsListing:
         response = client.get('/songs')
         assert response.status_code == 200
         data = response.json['data']
-        assert data == sample_songs
+        assert sample_songs[0] in data
 
     def test_default_pagination(self, app, client, sample_songs):
         """ Test that default pagination is applied """

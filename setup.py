@@ -11,7 +11,8 @@ setup(
     install_requires=[
         'Flask',
         'Flask-PyMongo',
-        'Click'
+        'Click',
+        'marshmallow'
     ],
     extras_require={
         'dev': [
