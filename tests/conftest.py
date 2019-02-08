@@ -1,6 +1,11 @@
-import songsapi
+import random
+import string
+
 import pytest
 from flask_pymongo import PyMongo
+
+import songsapi
+
 
 @pytest.fixture(scope='session')
 def app():
@@ -14,8 +19,32 @@ def client(app):
 
 @pytest.fixture(scope='session')
 def mongo(app):
-    """ Instantiates a mongo client with test database access """
+    ''' Instantiates a mongo client with test database access '''
     client = PyMongo()
     client.init_app(app)
     client.db.command('dropDatabase')
     return client
+
+
+@pytest.fixture
+def song_factory():
+    def factory(artist=None, title=None, difficulty=None, level=None):
+        return {
+            'artist': artist or random.choice(['Elvis Presley', 'A Day to Remember', 'Metallica', 'Black Sabbath']),
+            'title': title or ''.join(random.choices(string.ascii_uppercase + string.digits, k=32)),
+            'difficulty': difficulty or random.uniform(5, 15),
+            'level': level or random.randint(1, 15),
+            'released': '1978-12-01'
+        }
+    return factory
+
+
+@pytest.fixture
+def sample_songs(mongo, song_factory):
+    songs = [song_factory() for _ in range(20)]
+    result = mongo.db.songs.insert_many(songs)
+    for song in songs:
+        song['_id'] = str(song['_id'])
+    yield songs
+    # Cleanup
+    mongo.db.songs.delete_many({'_id': {'$in': result.inserted_ids}})

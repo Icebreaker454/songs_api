@@ -16,7 +16,7 @@ class ImportException(Exception):
 
 
 @app.cli.command('import_songs')
-@click.argument('filename', type=click.File())
+@click.argument('input_file', type=click.File())
 def import_songs(input_file):
     """
     Uploads data from sample file into application Storage
