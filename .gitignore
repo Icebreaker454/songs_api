@@ -1,0 +1,21 @@
+# Python byte-compiled code
+*.pyc
+*__pycache__*
+
+# Setuptools utilities
+*.egg-info/
+dist/
+build/
+
+# Environment configuration
+.python-version
+.env/
+venv/
+
+# Logs
+*.log*
+
+# Editor config
+.idea/
+.vscode/
+
