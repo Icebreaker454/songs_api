@@ -1,0 +1,7 @@
+[run]
+source = songsapi
+
+[report]
+omit =
+    *settings*
+show_missing = True

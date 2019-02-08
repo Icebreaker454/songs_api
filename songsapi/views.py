@@ -5,7 +5,7 @@ from songsapi.extensions import mongo
 
 
 @app.route('/songs')
-def index():
+def songs_list():
     return flask.jsonify({
         'data': [
             song for song in mongo.db.songs.find()
