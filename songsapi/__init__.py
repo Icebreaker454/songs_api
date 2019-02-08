@@ -1,10 +1,18 @@
 import os
+import sys
 from flask import Flask
 
 from songsapi.extensions import mongo
+from songsapi.json_encoder import MongoIdJsonDecoder
 
 app = Flask(__name__)
-app.config.from_object('songsapi.default_settings')
+app.config.from_object('songsapi.settings')
+if 'pytest' in sys.argv or 'py.test' in sys.argv:
+    app.config.from_object('songsapi.settings.test')
+
+# For painless serialization of mongo ObjectIDs
+app.json_encoder = MongoIdJsonDecoder
+
 mongo.init_app(app)
 
 if not app.debug:
