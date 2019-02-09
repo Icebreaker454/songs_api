@@ -1,6 +1,11 @@
 import random
 import string
 
+# Sometimes, the average difficulty calculated has a calculation error of about 1e-10 due to Python's floating point
+# calculation inaccuracy. Thus, I seeded the random module for tests reproducibility.
+# http://effbot.org/pyfaq/why-are-floating-point-calculations-so-inaccurate.htm
+random.seed(1337)
+
 import pytest
 from flask_pymongo import PyMongo
 
