@@ -19,3 +19,28 @@ def songs_list():
             song for song in songs_cursor
         ]
     })
+
+
+@app.route('/songs/avg/difficulty')
+def average_difficulty():
+    level = flask.request.args.get('level')
+    try:
+        params = {'level': {'$gte': int(level)}}
+    except (TypeError, ValueError):
+        params = {}
+
+    result_cursor = mongo.db.songs.aggregate([
+        {'$match': params},
+        {
+            '$group': {'_id': None, 'avg_difficulty': {'$avg': '$difficulty'}}
+        }
+    ])
+    try:
+        result = result_cursor.next()
+    except StopIteration:
+        # We don't have results to aggregate on?
+        result = None
+
+    return flask.jsonify({
+        'data': result
+    })
