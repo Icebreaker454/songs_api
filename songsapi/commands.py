@@ -1,6 +1,7 @@
 import json
 
 import click
+import pymongo
 
 from songsapi import app
 from songsapi.extensions import mongo
@@ -29,4 +30,7 @@ def import_songs(input_file):
         mongo.db.songs.insert_one(song)
         # A bit ugly, but efficient
         count += 1
+    app.logger.info(f'Creating indexes')
+    mongo.db.songs.create_index([('artist', pymongo.TEXT), ('title', pymongo.TEXT)])
     app.logger.info(f'DONE: Inserted: {count} records')
+
