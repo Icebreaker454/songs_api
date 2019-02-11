@@ -15,3 +15,9 @@ class TestAverageDifficulty:
         filtered_songs = list(filter(lambda x: x['level'] >= 10, sample_songs))
         assert response.json['data']['avg_difficulty'] == sum(
             song['difficulty'] for song in filtered_songs) / len(filtered_songs)
+
+    def test_aggregate_on_empty_list(self, client):
+        """ Average aggregation on an empty collection should return None """
+        response = client.get('/songs/avg/difficulty')
+        assert response.status_code == 200
+        assert not response.json['data']
