@@ -44,3 +44,13 @@ def average_difficulty():
     return flask.jsonify({
         'data': result
     })
+
+
+@app.route('/songs/search')
+def song_search():
+    message = flask.request.args.get('message')
+    return flask.jsonify({
+        'data': [
+            song for song in mongo.db.songs.find({'$text': {'$search': message}})
+        ]
+    })
