@@ -9,9 +9,7 @@ class StrictInteger(fields.Integer):
     """" Override fields.Number string to num coercion """
     def _format_num(self, value):
         """ Check instance of int  or raise a :exc:`ValidationError` if an error occurs."""
-        if value is None:
-            return None
-        if not isinstance(value, self.num_type):
+        if not isinstance(value, self.num_type) and value is not None:
             raise ValidationError("Not a valid integer.")
         return value
 
