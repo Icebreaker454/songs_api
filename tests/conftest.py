@@ -45,6 +45,16 @@ def song_factory():
 
 
 @pytest.fixture
+def song_rating_factory():
+    def factory(song_id, rating=None):
+        return {
+            'song_id': song_id,
+            'rating': rating or random.randint(1, 5)
+        }
+    return factory
+
+
+@pytest.fixture
 def sample_songs(mongo, song_factory):
     songs = [song_factory() for _ in range(20)]
     result = mongo.db.songs.insert_many(songs)
@@ -53,3 +63,12 @@ def sample_songs(mongo, song_factory):
     yield songs
     # Cleanup
     mongo.db.songs.delete_many({'_id': {'$in': result.inserted_ids}})
+
+
+@pytest.fixture
+def sample_song(mongo):
+    mongo.db.song_ratings.delete_many({})
+    song = {'title': 'Nah, just for testing purposes', 'album': 'DevOps dreams'}
+    result = mongo.db.songs.insert_one(song)
+    yield song
+    mongo.db.songs.delete_one({'_id': result.inserted_id})

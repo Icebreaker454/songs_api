@@ -1,15 +1,5 @@
 import pytest
 import json
-from bson import ObjectId
-
-
-@pytest.fixture
-def sample_song(mongo):
-    mongo.db.song_ratings.delete_many({})
-    song = {'title': 'Nah, just for testing purposes', 'album': 'DevOps dreams'}
-    result = mongo.db.songs.insert_one(song)
-    yield song
-    mongo.db.songs.delete_one({'_id': result.inserted_id})
 
 
 @pytest.fixture
