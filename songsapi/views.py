@@ -1,3 +1,5 @@
+import bson
+
 import flask
 import marshmallow
 
@@ -74,3 +76,25 @@ def song_rating():
     except marshmallow.exceptions.ValidationError as e:
         return flask.jsonify({'errors': e.args[0]})
 
+
+@app.route('/songs/avg/rating/<song_id>')
+def song_average_rating(song_id):
+    try:
+        cursor = mongo.db.song_ratings.aggregate([
+            {'$match': {'song_id': bson.ObjectId(song_id)}},
+            {
+                '$group': {
+                    '_id': None,
+                    'avg_rating': {'$avg': '$rating'},
+                    'min_rating': {'$min': '$rating'},
+                    'max_rating': {'$max': '$rating'}
+                }
+            }
+        ])
+        result = cursor.next()
+    except (StopIteration, bson.errors.InvalidId):
+        result = None
+
+    return flask.jsonify({
+        'data': result
+    })
