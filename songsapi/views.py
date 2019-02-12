@@ -3,6 +3,7 @@ import marshmallow
 
 from songsapi import app
 from songsapi.extensions import mongo
+from songsapi.schemas import SongRatingSchema
 
 
 @app.route('/songs')
@@ -61,3 +62,15 @@ def song_search():
             song for song in mongo.db.songs.find({'$text': {'$search': message}})
         ]
     })
+
+
+@app.route('/songs/rating', methods=['POST'])
+def song_rating():
+    # Marshmallow `strict` schemas operate quite weirdly, so some kind of exception handling is necessary over here.
+    try:
+        rating_schema = SongRatingSchema(strict=True).load(flask.request.json)
+        mongo.db.song_ratings.insert_one(rating_schema.data)
+        return flask.jsonify({'data': {'message': f'Song {rating_schema.data["song_id"]} rated successfully'}})
+    except marshmallow.exceptions.ValidationError as e:
+        return flask.jsonify({'errors': e.args[0]})
+
