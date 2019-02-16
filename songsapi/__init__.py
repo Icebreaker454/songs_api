@@ -6,9 +6,7 @@ from songsapi.json_encoder import MongoIdJsonEncoder
 
 app = Flask(__name__)
 app.config.from_object('songsapi.settings')
-
-if os.environ.get('FLASK_TESTING', False):
-    app.config.from_object('songsapi.settings.test')
+app.config.from_envvar('SONGSAPI_SETTINGS')
 
 # For painless serialization of mongo ObjectIDs
 app.json_encoder = MongoIdJsonEncoder

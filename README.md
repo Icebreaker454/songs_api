@@ -6,30 +6,68 @@ This is a RESTful song API
 
 ### Prerequisities
 
-A working MongoDB instance
+A working MongoDB instance located at `localhost:27017`
+
+An easy way to setup using Docker:
+```
+$ docker pull mongo
+$ docker run -p 27017:27017 mongo
+```
+
+### Clone the repository
+
+```
+$ git clone https://github.com/Icebreaker454/songs_api 
+```
 
 ### Development
 Install the dev extras package via setuptools
 ```
-pip install -e '.[dev]'
+$ pip install -e '.[dev]'
 ```
 
 Run the application
 ```
-export FLASK_APP=songsapi
-flask run
+$ export SONGSAPI_SETTINGS=settings/default.py
+$ export FLASK_APP=songsapi
+$ flask run
 ```
-And open it in the browser at [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+It becomes available in the browser at [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+
+
+### Popuate the database
+
+```
+$ flask import_songs var/songs.json
+```
 
 
 ### Production
 Install the application via setuptools
 ```
-pip install -e .
+$ pip install -e .
 ```
 
 Run the application
 ```
-export FLASK_APP=songsapi
-FLASK_DEBUG=0 flask run
+$ export SONGSAPI_SETTINGS=settings/default.py
+$ export FLASK_APP=songsapi
+$ FLASK_DEBUG=0 flask run
 ```
+
+
+
+### Testing
+
+The API includes tests written in PyTest.
+It supports setuptools `test` command:
+```
+$ python setup.py test
+```
+
+As well as a regular pytest command:
+
+```
+$ pytest
+```
+
