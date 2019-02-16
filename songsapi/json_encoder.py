@@ -2,7 +2,7 @@ import flask
 import bson
 
 
-class MongoIdJsonDecoder(flask.json.JSONEncoder):
+class MongoIdJsonEncoder(flask.json.JSONEncoder):
     def default(self, o):
         if isinstance(o, bson.ObjectId):
             return str(o)

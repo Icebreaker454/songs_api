@@ -14,7 +14,8 @@ import songsapi
 
 @pytest.fixture(scope='session')
 def app():
-    return songsapi.app
+    app = songsapi.app
+    return app
 
 
 @pytest.fixture

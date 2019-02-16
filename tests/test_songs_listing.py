@@ -14,10 +14,11 @@ class TestSongsListing:
     def test_default_pagination(self, app, client, sample_songs):
         """ Test that default pagination is applied """
         response = client.get('/songs')
+        print(app.config)
         data = response.json['data']
         assert len(data) == app.config['PAGE_SIZE']
 
-    def test_pagination_works(self, client, sample_songs):
+    def test_pagination_works(self, app, client, sample_songs):
         """ Custom pagination arguments - limit and offset should work """
         params = {
             'limit': 5, 'offset': 3

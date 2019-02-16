@@ -1,3 +1,3 @@
-from .default import *
+from .default import *  # noqa
 
-MONGO_DB_NAME = 'test_songs'
+MONGO_URI = 'mongodb://127.0.0.1:27017/test_songs'

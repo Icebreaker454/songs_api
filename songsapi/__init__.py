@@ -1,21 +1,21 @@
 import os
-import sys
 from flask import Flask
 
 from songsapi.extensions import mongo
-from songsapi.json_encoder import MongoIdJsonDecoder
+from songsapi.json_encoder import MongoIdJsonEncoder
 
 app = Flask(__name__)
 app.config.from_object('songsapi.settings')
-if 'pytest' in sys.argv or 'py.test' in sys.argv:
+
+if os.environ.get('FLASK_TESTING', False):
     app.config.from_object('songsapi.settings.test')
 
 # For painless serialization of mongo ObjectIDs
-app.json_encoder = MongoIdJsonDecoder
+app.json_encoder = MongoIdJsonEncoder
 
 mongo.init_app(app)
 
-if not app.debug:
+if os.environ.get('FLASK_DEBUG', True):
     import logging
     from logging.handlers import TimedRotatingFileHandler
     # https://docs.python.org/3.6/library/logging.handlers.html#timedrotatingfilehandler

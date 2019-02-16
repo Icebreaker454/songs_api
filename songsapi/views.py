@@ -47,6 +47,7 @@ def average_difficulty():
     ])
     try:
         result = result_cursor.next()
+        result = {'avg_difficulty': result['avg_difficulty']}
     except StopIteration:
         # We don't have results to aggregate on?
         result = None
@@ -92,6 +93,9 @@ def song_average_rating(song_id):
             }
         ])
         result = cursor.next()
+        result = {'min_rating': result['min_rating'],
+                  'max_rating': result['max_rating'],
+                  'avg_rating': result['avg_rating']}
     except (StopIteration, bson.errors.InvalidId):
         result = None
 
